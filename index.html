@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<style>
+    body{
+        margin: 0; 
+    }
+    #game {
+        margin: auto;
+        top: 200px;
+        /* top: 200px;
+        left: 300px; */
+        width: 1000px;
+        height: 500px;
+        /* 設定滑鼠準心 */
+        
+        background-image: url(./123.jpg); 
+        cursor: url(./3456.png) 20 20, auto;
+        overflow: hidden;
+        position: relative;
+    }
+  
+    #game img{
+        height: 150px;
+        width: 150px;
+        position: absolute;
+    }
+    .score{
+        position: absolute;
+        top: 75%;
+        left:25% ;
+        font-family: "微軟正黑體",Arial, Helvetica, sans-serif;
+        font-size: 20px;
+        
+    }
+    .button{
+        font-size: 20px;
+        font-family: "微軟正黑體",Arial, Helvetica, sans-serif;
+        border-style: solid;
+        background-color:white;
+    }
+</style>
+
+<body>
+    <div id="game">
+        
+            
+    </div>
+    <div class="score">
+            <input type="button" value="開始遊戲" id="start" class="button">
+            分數 <span id="score">    </span>
+            剩餘 <span id="sec">20</span>秒
+    </div>
+   
+    </div>
+    
+    <script src="./jquery-3.4.1.min.js"></script>
+    <script>
+            $(function(){
+                //分數
+                let score = 0;
+                //遊戲時間
+                let sec = 20;
+                // 每秒產生殭屍的計時器
+                let zbtimer = 0;
+                // 遊戲倒數計時
+                let gametimer = 0;
+                // zb 流水號
+                let zbid = 0;
+                let zbid1 = 0; 
+                
+                // 隨機功能
+                let rand = (num) => {
+                    return Math.round(Math.random()*num);
+                }
+
+                // 移動zb 功能
+                let movezb = (id) =>{
+
+                    $(`#zb${id}`).animate({
+                        left: rand(200)+"%",
+                        bottom: rand(30)+"%"
+                    },5000,function(){
+                        movezb(id);
+                    })
+                }
+                let movezb2 = (id) =>{
+                    
+                    $(`#zb1${id}`).animate({
+                        left: rand(200)+"%",
+                        bottom: rand(30)+"%"
+                    },5000,function(){
+                        movezb(id);
+                    })
+                }
+                
+                
+
+                // 點擊開始按鈕後
+                $("#start").on("click", function(){
+                  
+                    // 開始按鈕失效
+                    $(this).attr("disabled",true);
+
+                    //開始倒數
+                    gametimer = setInterval(function(){
+                        //秒數減1 修改文字
+                        sec--;
+                        $("#sec").text(sec);
+
+                        // 如果到0
+                        if(sec == 0){
+                            clearInterval(gametimer);
+                            $(this).attr("disabled",false);
+                            setTimeout(()=>{
+                                alert("時間到");
+                            },100)
+                            $("#game").empty();
+                            sec=20;
+                        }
+
+                    let num = rand(10);
+                    if (num > 2){
+                    $("#game").append(`<img src="./234-.gif" id="zb${zbid}">`);
+                    $("#game").append(`<img src="./aaa.gif" id="zb1${zbid1}">`);
+
+                    $(`#zb${zbid}`).css({ 
+                        right: rand(0)+"%", 
+                        bottom: rand(30)+"%"
+                    });
+                    movezb(zbid);
+                    zbid++;
+
+                    $(`#zb1${zbid1}`).css({ 
+                        left: rand(0)+"%", 
+                        bottom: rand(30)+"%"
+                    });
+                    movezb2(zbid1);
+                    zbid1++;
+                    }
+                },1000)
+            })   
+            
+            $("#game").on("click", "img" ,function(){
+                $(this).attr("src", "./bacon.png");
+                $(this).stop();
+                $(this).css("pointer-events", "none");
+                score++;
+                $("score").text(score);
+
+            })
+        })
+    </script>
+</body>
+</html>
